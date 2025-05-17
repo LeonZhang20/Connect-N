@@ -1,6 +1,6 @@
 // Game.cpp
 
-#include "provided.h"
+#include "GameCore.h"
 #include <stack>
 #include <iostream>
 
@@ -183,7 +183,7 @@ bool GameImpl::completed(int& winner) const
 
 
     if (this->scaf->numberEmpty() == 0) { //Full scaf, tie game
-        winner = TIE_GAME;
+        winner = TIE;
         return true;
     }
 
@@ -239,7 +239,7 @@ void GameImpl::play()
             cout << this->blackP->name() << " (BLACK) won!" << endl;
             return;
         }
-        if (outcome == TIE_GAME) {
+        if (outcome == TIE) {
             cout << "Tied Game!" << endl;
             return;
         }
@@ -260,7 +260,7 @@ void GameImpl::play()
             cout << this->blackP->name() << " (BLACK) won!" << endl;
             return;
         }
-        if (outcome == TIE_GAME) {
+        if (outcome == TIE) {
             cout << "Tied Game!" << endl;
             return;
         }
@@ -274,10 +274,6 @@ int GameImpl::checkerAt(int c, int r) const
     return scaf->checkerAt(c, r);
 } 
 
-//******************** Game functions *******************************
-
-//  These functions simply delegate to GameImpl's functions.
-//  You probably don't want to change any of this code. 
 
 Game::Game(int nColumns, int nLevels, int N, Player* red, Player* black)
 {
@@ -308,3 +304,4 @@ int Game::checkerAt(int c, int r) const
 {
     return m_impl->checkerAt(c, r);
 }
+

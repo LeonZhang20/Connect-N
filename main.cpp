@@ -1,6 +1,6 @@
 // main.cpp
 
-#include "provided.h"
+#include "GameCore.h"
 #include <string>
 #include <iostream>
 #include <cassert>
