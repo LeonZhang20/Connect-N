@@ -177,8 +177,8 @@ bool GameImpl::completed(int& winner) const
                     winner = BLACK;
                     return true;
                 }
-            };
-        };
+            }
+        }
     }
 
 
