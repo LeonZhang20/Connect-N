@@ -19,7 +19,7 @@ private:
     Player* redP;
     Player* blackP;
     int connectN; //number of checkers needed to win
-    stack<int> turnHistory; // Turn History stack, similar to moveHistory stack in Scaffold
+    stack<int> turnHistory; // Records turn order, like the move history vector in Scaffold
    
 };
 
