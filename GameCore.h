@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <chrono>
+#include <iostream>
 
 //––– Basic types & enums ––––––––––––––––––––––––––––––––––––––––––––––––––
 enum Color     { VACANT = 0, RED = 1, BLACK = 2 };
@@ -126,7 +127,25 @@ class SmartPlayer : public Player {
                  int alpha, int beta, AlarmClock& ac);
     int  evaluateState(const Scaffold& s, int N,
                        int color, int depth, AlarmClock& ac);
+    int  heuristicScore(const Scaffold& s, int N, int color);
     GameState checkState(const Scaffold& s, int N);
+};
+
+class GameImpl;  // defined in Game.cpp
+
+//-- Game facade that uses a private implementation -------------------------
+class Game {
+  public:
+    Game(int nColumns, int nLevels, int N,
+         Player* red, Player* black);
+    ~Game();
+    bool completed(int& winner) const;
+    bool takeTurn();
+    void play();
+    int  checkerAt(int c, int r) const;
+
+  private:
+    GameImpl* m_impl;
 };
 
 #endif // GAMECORE_H

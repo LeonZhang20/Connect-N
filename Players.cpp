@@ -131,7 +131,7 @@ int SmartPlayer::heuristicScore(const Scaffold& s, int N, int color) {
         for (int r = 1; r <= s.levels(); ++r) {
             for (auto [dc, dr] : dirs) {
                 score += scoreLine(c, r, dc, dr, color);
-                score -= scoreLine(c, r, dc, dr, opp);
+                score -= scoreLine(c, r, dc, dr, opp); // subtract opponent score
             }
         }
     }
