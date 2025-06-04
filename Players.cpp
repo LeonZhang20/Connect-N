@@ -112,17 +112,36 @@ int SmartPlayer::evaluateState(const Scaffold& s, int N, int color, int depth, A
 
 int SmartPlayer::heuristicScore(const Scaffold& s, int N, int color) {
     int opp = (color == RED ? BLACK : RED);
+
+    // Pre-compute current height of each column to reason about reachability of
+    // cells above the existing stack.  A cell is considered reachable only if
+    // its row index is at most height[col] + 1.
+    std::vector<int> height(s.cols() + 1, 0);
+    for (int c = 1; c <= s.cols(); ++c) {
+        for (int r = s.levels(); r >= 1; --r) {
+            if (s.checkerAt(c, r) != VACANT) { height[c] = r; break; }
+        }
+    }
+
     auto scoreLine = [&](int c, int r, int dc, int dr, int col) {
         int countColor = 0, countEmpty = 0;
         for (int i = 0; i < N; ++i) {
             int cc = c + i * dc, rr = r + i * dr;
             if (cc < 1 || cc > s.cols() || rr < 1 || rr > s.levels()) return 0;
             int cell = s.checkerAt(cc, rr);
-            if (cell == col) countColor++;
-            else if (cell == VACANT) countEmpty++;
-            else return 0; // Blocked by opponent
+            if (cell == col) {
+                countColor++;
+            } else if (cell == VACANT) {
+                // If this cell is not immediately reachable, the pattern is
+                // unlikely to be completed soon, so disregard this line.
+                if (rr > height[cc] + 1) return 0;
+                countEmpty++;
+            } else {
+                // Blocked by the opponent
+                return 0;
+            }
         }
-        return (countColor == 0 ? 0 : (countColor * countColor + countEmpty)); // Weighted pattern
+        return (countColor == 0 ? 0 : (countColor * countColor + countEmpty));
     };
 
     int score = 0;
@@ -131,7 +150,7 @@ int SmartPlayer::heuristicScore(const Scaffold& s, int N, int color) {
         for (int r = 1; r <= s.levels(); ++r) {
             for (auto [dc, dr] : dirs) {
                 score += scoreLine(c, r, dc, dr, color);
-                score -= scoreLine(c, r, dc, dr, opp); // subtract opponent score
+                score -= scoreLine(c, r, dc, dr, opp);
             }
         }
     }
