@@ -112,13 +112,13 @@ int SmartPlayer::evaluateState(const Scaffold& s, int N, int color, int depth, A
 
 int SmartPlayer::heuristicScore(const Scaffold& s, int N, int color) {
     int opp = (color == RED ? BLACK : RED);
-    auto scoreLine = [&](int c, int r, int dc, int dr) {
+    auto scoreLine = [&](int c, int r, int dc, int dr, int col) {
         int countColor = 0, countEmpty = 0;
         for (int i = 0; i < N; ++i) {
             int cc = c + i * dc, rr = r + i * dr;
             if (cc < 1 || cc > s.cols() || rr < 1 || rr > s.levels()) return 0;
             int cell = s.checkerAt(cc, rr);
-            if (cell == color) countColor++;
+            if (cell == col) countColor++;
             else if (cell == VACANT) countEmpty++;
             else return 0; // Blocked by opponent
         }
@@ -130,8 +130,8 @@ int SmartPlayer::heuristicScore(const Scaffold& s, int N, int color) {
     for (int c = 1; c <= s.cols(); ++c) {
         for (int r = 1; r <= s.levels(); ++r) {
             for (auto [dc, dr] : dirs) {
-                score += scoreLine(c, r, dc, dr);
-                score -= scoreLine(c, r, dc, dr); // Optional: subtract opponent score if needed
+                score += scoreLine(c, r, dc, dr, color);
+                score -= scoreLine(c, r, dc, dr, opp); // subtract opponent score
             }
         }
     }

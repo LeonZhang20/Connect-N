@@ -47,6 +47,6 @@ void doPlayerTests()
 
 int main()
 {
-	doPlayerTests();
-	cout << "Passed all tests" << endl;
+        doPlayerTests();
+        cout << "Passed all tests" << endl;
 }
