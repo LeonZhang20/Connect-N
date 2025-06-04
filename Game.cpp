@@ -9,10 +9,11 @@ using namespace std;
 class GameImpl
 {
   public:
-    GameImpl(int nColumns, int nLevels, int N, Player* red, Player* black); 
-    bool completed(int& winner) const; 
-    bool takeTurn(); 
-    void play(); 
+    GameImpl(int nColumns, int nLevels, int N, Player* red, Player* black);
+    ~GameImpl();
+    bool completed(int& winner) const;
+    bool takeTurn();
+    void play();
     int checkerAt(int c, int r) const;
 private:
     Scaffold* scaf;
@@ -29,9 +30,14 @@ GameImpl::GameImpl(int nColumns, int nLevels, int N, Player* red, Player* black)
     redP = red;
     blackP = black;
     connectN = N;
-    
 
-    turnHistory.push(RED); //This will tell the algorithm that RED should go next 
+
+    turnHistory.push(RED); //This will tell the algorithm that RED should go next
+}
+
+GameImpl::~GameImpl()
+{
+    delete scaf;
 }
 
 bool GameImpl::completed(int& winner) const
