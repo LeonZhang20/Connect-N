@@ -34,7 +34,10 @@ void doPlayerTests()
 	assert(sp.name() == "Lisa" && !sp.isInteractive());
 	Scaffold s(3, 2);
 	s.makeMove(1, RED);
-	s.makeMove(1, BLACK);
+        s.makeMove(1, BLACK);
+        s.undoMove();
+        assert(s.checkerAt(1, 2) == VACANT);
+        assert(s.numberEmpty() == 5);
 	cout << "=========" << endl;
 	int n = hp.chooseMove(s, 3, RED);
 	cout << "=========" << endl;
